@@ -8,7 +8,7 @@
 ## 2023.03.23 ~ 2023.03.26  
 
 구현 실력을 위한 몸풀기 단계  
-프로그래머스 고득점 kit 각 주제별 lv.1 ~ lv.2 풀기  
+[프로그래머스 고득점 kit](https://school.programmers.co.kr/learn/challenges?tab=algorithm_practice_kit) 각 주제별 lv.1 ~ lv.2 풀기  
 문제 풀이 순서는 상관 없음.  
 
 ### 진행도
