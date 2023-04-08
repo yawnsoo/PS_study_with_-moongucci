@@ -47,4 +47,10 @@ public class 프린트 {
             return answer;
         }
     }
+
+    //            String[] a = new String[]{"1","2","3","4","11","111","12","22","21"};
+    //
+    //            Arrays.sort(a);
+    //
+    //            System.out.println(Arrays.toString(a));
 }
