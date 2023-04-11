@@ -1,44 +1,72 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Main {
+    int answer = 0;
+    int cnt = 0;
+    int inBridge = 0;
 
-        //1. for문으로 node 방문
-        //2. dfs로 node와 이어진 부분 모두 true
-        //  2.1 n만큼 돌면 종료
-        //  2.2 하나라도 true로 바뀌었으면 answer++;
+    public void addTruckToBridge(Queue<Integer> trucks, Queue<Integer> bridge, Queue<Integer> timeIn){
+        int truckIn = trucks.poll();
+        //  - 다리q에 무게 추가
+        bridge.offer(truckIn);
+        //  - 총 무게에 추가
+        inBridge += truckIn;
+        //  - 시각q에 들어간 시간 추가
+        timeIn.offer(answer);
+    }
 
-        int answer = 0;
-        boolean[] visited;
-        int nodes;
+    public void passedTruckFromBridge(Queue<Integer> bridge, Queue<Integer> timeIn){
+        //  - 시간q.pop()
+        timeIn.poll();
+        //  - 총 무게에 빼기
+        inBridge -= bridge.poll();
+        //  - cnt++
+        cnt++;
+    }
 
-        public void dfs(int[][] computers, int node, boolean flag, int idx){
-            if(idx==nodes){
-                if(flag) answer++;
-                return;
+
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+
+
+        //queue 3개로 구현 : 다리q, 시각q, 트럭무게q
+        Queue<Integer> bridge = new LinkedList<>();
+        Queue<Integer> timeIn = new LinkedList<>();
+        Queue<Integer> trucks = new LinkedList<>();
+
+        for(int i : truck_weights){
+            trucks.offer(i);
+        }
+
+
+        answer++;
+        addTruckToBridge(trucks, bridge, timeIn);
+
+
+        //3. cnt == 트럭의 개수 이면 종료
+        while(cnt<truck_weights.length){
+            answer++;
+
+            //1. 시각q.pop()+다리 길이 의 시간에 도달 할 경우
+            if(timeIn.peek()+bridge_length == answer){
+                passedTruckFromBridge(bridge, timeIn);
             }
 
-            for(int i = idx; i < nodes; i++){
-                if(!visited[i]&&computers[node][i]==1){
-                    flag = true;
-                    visited[i] = true;
-                    dfs(computers, i, flag, i+1);
+            //2. 다리(queue)에 올라가 있는 무게 총값 + 들어갈 트럭 <= 다리가 견딜 수 있는 무게
+            if(!trucks.isEmpty()){ //트럭이 남아 있을 경우
+                if(inBridge+trucks.peek()<=weight){
+                    addTruckToBridge(trucks, bridge, timeIn);
                 }
             }
+
         }
 
-        public int solution(int n, int[][] computers) {
-
-            nodes = n;
-            visited = new boolean[n];
-
-            for(int i = 0; i < n; i++){
-                //i 번째 node와 이어진 모든 node 방문
-                dfs(computers, i, false, 0);
-            }
-
-            return answer;
-        }
+        //4. 시각 return;
+        return answer;
+    }
 
     public static void main(String[] args) {
-        int a = new Main().solution(3, new int[][]{{1,1,0},{1,1,0},{0,0,1}});
+        int a = new Main().solution(2,10,new int[]{7,4,5,6});
 
         System.out.println(a);
     }
