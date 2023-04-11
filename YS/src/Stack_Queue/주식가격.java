@@ -17,11 +17,9 @@ public class 주식가격 {
                 //stack에 idx값 넣고 비교
                 } else {
                     s.push(i);
-                    while(prices[s.peek()]>prices[i+1]){
+                    while(!s.isEmpty()&&prices[s.peek()]>prices[i+1]){
                         int idx = s.pop();
                         answer[idx] = i+1 - idx;
-
-                        if(s.isEmpty()) break;
                     }
                 }
             }
