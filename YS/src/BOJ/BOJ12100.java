@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ12100 {
 
     int max = 0;
     static int n = 0;
@@ -199,8 +201,8 @@ public class Main {
     public void dfs(int[][] map, int phase){
 
         //종료 : 5번 or 전이랑 변경 없으면
-//        if(phase==5||isSame(map)){
-        if(phase==5){
+        if(phase==5||isSame(map)){
+//        if(phase==5){
             //  - 최댓값 비교 후 저장
             int maxNum = maxNum(map);
             if(max<maxNum){
@@ -246,12 +248,13 @@ public class Main {
 
         long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
 
-        int a = new Main().Main(map);
+        int a = new BOJ12100().Main(map);
 
         long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
         long secDiffTime = (afterTime - beforeTime)/1000; //두 시간에 차 계산
 
-        System.out.println("각 페이즈에서 변화 확인 안할 경우");
+//        System.out.println("각 페이즈에서 변화 확인 : X");
+        System.out.println("각 페이즈에서 변화 확인 : O");
         System.out.printf("answer : %d\n",a);
         System.out.printf("cnt : %d\n",cnt);
         System.out.println("시간차이(m) : "+secDiffTime);
