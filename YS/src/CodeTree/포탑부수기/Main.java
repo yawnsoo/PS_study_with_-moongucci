@@ -1,8 +1,8 @@
-package CodeTree;
+package CodeTree.포탑부수기;
 
 import java.util.*;
 
-public class 포탑부수기 {
+public class Main {
 
     int[] attacker = new int[2];
     int[] target = new int[2];
@@ -355,6 +355,6 @@ public class 포탑부수기 {
             }
         }
 
-        System.out.println(new 포탑부수기().solution(map,n,m,k));
+        System.out.println(new Main().solution(map,n,m,k));
     }
 }
