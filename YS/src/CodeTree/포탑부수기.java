@@ -1,6 +1,8 @@
+package CodeTree;
+
 import java.util.*;
 
-public class Main {
+public class 포탑부수기 {
 
     int[] attacker = new int[2];
     int[] target = new int[2];
@@ -51,11 +53,6 @@ public class Main {
                 }
                 attackerQ.offer(t);
             }
-
-            //주의
-            // for문에 queue.size()를 넣을 경우, 범위가 바뀜. => 끝까지 안 돈다.
-            // 크기가 변하는 자료 구조에 대해선,
-            // 상황에 따라 사이즈 지정해 놓고 사용할 것.
 
             int size = attackerQ.size();
             for (int i = 0; i < size; i++) {
@@ -341,7 +338,7 @@ public class Main {
                 if(x>max) max = x;
             }
         }
-         return max;
+        return max;
     }
 
     public static void main(String[] args) {
@@ -358,6 +355,6 @@ public class Main {
             }
         }
 
-        System.out.println(new Main().solution(map,n,m,k));
+        System.out.println(new 포탑부수기().solution(map,n,m,k));
     }
 }
