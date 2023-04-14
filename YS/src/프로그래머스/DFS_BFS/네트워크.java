@@ -1,4 +1,4 @@
-package DFS_BFS;
+package 프로그래머스.DFS_BFS;
 
 public class 네트워크 {
     class Solution {

@@ -1,4 +1,4 @@
-package DFS_BFS;
+package 프로그래머스.DFS_BFS;
 
 public class 타겟넘버 {
     class Solution {

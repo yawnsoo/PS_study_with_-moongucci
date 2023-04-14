@@ -1,4 +1,4 @@
-package Stack_Queue;
+package 프로그래머스.Stack_Queue;
 import java.util.*;
 
 public class 주식가격 {
