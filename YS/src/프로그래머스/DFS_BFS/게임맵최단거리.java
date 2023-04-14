@@ -1,4 +1,4 @@
-package DFS_BFS;
+package 프로그래머스.DFS_BFS;
 import java.util.*;
 
 public class 게임맵최단거리 {

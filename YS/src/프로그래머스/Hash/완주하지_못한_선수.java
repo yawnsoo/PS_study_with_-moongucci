@@ -1,4 +1,4 @@
-package Hash;
+package 프로그래머스.Hash;
 import java.util.*;
 
 public class 완주하지_못한_선수 {
