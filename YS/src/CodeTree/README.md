@@ -1,86 +1,156 @@
-[문제 링크](https://www.codetree.ai/problems/destroy-the-turret/description?discussionRowsPerPage=5&discussionPage=1)
-
 # [Gold I] 포탑 부수기 - BFS, Simulation
 
-<div class="wmde-markdown wmde-markdown-color "><p><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">N \times M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7667em; vertical-align: -0.0833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span></span></span></span></span> 격자가 있고, 모든 위치에는 포탑이 존재합니다. (즉, 포탑의 개수는 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">NM</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">NM</span></span></span></span></span>개)</p>
-<p>각 포탑에는 공격력이 존재하며, 상황에 따라 공격력이 줄어들거나 늘어날 수 있습니다. 또한, 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">0</span></span></span></span></span> 이하가 된다면, 해당 포탑은 부서지며 더 이상의 공격을 할 수 없습니다. 최초에 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">0</span></span></span></span></span>인 포탑 즉, 부서진 포탑이 존재할 수 있습니다.</p>
-<p>아래와 같은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">4 \times 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7278em; vertical-align: -0.0833em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">4</span></span></span></span></span> 크기의 격자를 생각해보겠습니다. <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1, 1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mo separator="true">,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(3, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span> 를 포함한 총 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">7</span></span></span></span></span>개의 칸은 이미 부서진 포탑을 의미합니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/01954636-dcbb-4032-91e4-f1aeccdfa92f.png">
-</p>
-<p>하나의 턴은 다음의 4가지 액션을 순서대로 수행하며, 총 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span>번 반복됩니다.<br>
-만약 부서지지 않은 포탑이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">1</span></span></span></span></span>개가 된다면 그 즉시 중지됩니다.</p>
-<h3 id="1-공격자-선정"><a class="anchor" aria-hidden="true" tabindex="-1" href="#1-공격자-선정"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>1. 공격자 선정</h3>
-<p>부서지지 않은 포탑 중 <strong>가장 약한 포탑</strong>이 공격자로 선정됩니다. 공격자로 선정되면 가장 약한 포탑이므로, 핸디캡이 적용되어 <strong><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>+</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">N+M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7667em; vertical-align: -0.0833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span></span></span></span></span>만큼의 공격력이 증가</strong>됩니다.</p>
-<p><strong>가장 약한 포탑</strong>은 다음의 기준으로 선정됩니다.</p>
-<ol>
-<li><strong>공격력이 가장 낮은</strong> 포탑이 가장 약한 포탑입니다.</li>
-<li>만약 공격력이 가장 낮은 포탑이 2개 이상이라면, <strong>가장 최근에 공격한 포탑</strong>이 가장 약한 포탑입니다. (모든 포탑은 시점 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">0</span></span></span></span></span>에 모두 공격한 경험이 있다고 가정하겠습니다.)</li>
-<li>만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 <strong>행과 열의 합이 가장 큰</strong> 포탑이 가장 약한 포탑입니다.</li>
-<li>만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 <strong>열 값이 가장 큰</strong> 포탑이 가장 약한 포탑입니다.</li>
-</ol>
-<p>위의 예시에서 공격자를 선정해보면, 가장 낮은 공격력은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">1</span></span></span></span></span>이기 때문에, 아래 그림과 같이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span> 위치에 있는 포탑이 공격자로 선정되며, 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo stretchy="false">(</mo><mo>=</mo><mn>4</mn><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo>+</mo><mn>4</mn><mo stretchy="false">(</mo><mi>M</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">8(=4(N)+4(M))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">8</span><span class="mopen">(</span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">4</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span><span class="mclose">)</span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">4</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span><span class="mclose">))</span></span></span></span></span>만큼 증가하여 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">9</span></span></span></span></span>가 됩니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/09739233-1fbe-4b78-b940-9f000a69ddfa.png">
-</p>
-<h3 id="2-공격자의-공격"><a class="anchor" aria-hidden="true" tabindex="-1" href="#2-공격자의-공격"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>2. 공격자의 공격</h3>
-<p>위에서 선정된 공격자는 자신을 제외한 <strong>가장 강한 포탑</strong>을 공격합니다.<br>
-<strong>가장 강한 포탑</strong>은 위에서 정한 가장 약한 포탑 선정 기준의 반대이며, 다음과 같습니다.</p>
-<ol>
-<li><strong>공격력이 가장 높은</strong> 포탑이 가장 강한 포탑입니다.</li>
-<li>만약 공격력이 가장 높은 포탑이 2개 이상이라면, <strong>공격한지 가장 오래된 포탑</strong>이 가장 강한 포탑입니다.  (모든 포탑은 시점 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">0</span></span></span></span></span>에 모두 공격한 경험이 있다고 가정하겠습니다.)</li>
-<li>만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 <strong>행과 열의 합이 가장 작은</strong> 포탑이 가장 강한 포탑입니다.</li>
-<li>만약 그러한 포탑이 2개 이상이라면,  각 포탑 위치의 <strong>열 값이 가장 작은</strong> 포탑이 가장 강한 포탑입니다.</li>
-</ol>
-<p>위의 예시에서 공격 대상자를 선정해보겠습니다. 공격 대상인 가장 강한 포탑은 공격력이 가장 큰 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>26</mn></mrow><annotation encoding="application/x-tex">26</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">26</span></span></span></span></span>의 공격력을 가진 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mo separator="true">,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(3,4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span> 위치의 포탑이 됩니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/ebed2fad-f1c1-4a94-ac8c-fb051363e70a.png">
-</p>
-<p>공격을 할 때에는 <strong>레이저 공격</strong>을 먼저 시도하고, 만약 그게 안 된다면 <strong>포탄 공격</strong>을 합니다. 각 공격의 규칙은 다음과 같습니다.</p>
-<h4 id="1-레이저-공격"><a class="anchor" aria-hidden="true" tabindex="-1" href="#1-레이저-공격"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>(1) 레이저 공격</h4>
-<p>레이저는 다음의 규칙으로 움직입니다.</p>
-<ol>
-<li>상하좌우의 4개의 방향으로 움직일 수 있습니다.</li>
-<li>부서진 포탑이 있는 위치는 지날 수 없습니다.</li>
-<li>가장자리에서 막힌 방향으로 진행하고자 한다면, 반대편으로 나옵니다.   (예를 들어, 위의 예시에서 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span>에서 오른쪽으로 두번 이동한다면, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span> -&gt; <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span> -&gt; <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 순으로 이동합니다.)</li>
-</ol>
-<p>레이저 공격은 공격자의 위치에서 공격 대상 포탑까지의 최단 경로로 공격합니다. 만약 그러한 경로가 존재하지 않는다면 (2) 포탄 공격을 진행합니다. 만약 경로의 길이가 똑같은 최단 경로가 2개 이상이라면, 우/하/좌/상의 우선순위대로 먼저 움직인 경로가 선택됩니다.</p>
-<p>최단 경로가 정해졌으면, 공격 대상에는 공격자의 공격력 만큼의 피해를 입히며, 피해를 입은 포탑은 해당 수치만큼 공격력이 줄어듭니다. 또한 공격 대상을 제외한 레이저 경로에 있는 포탑도 공격을 받게 되는데, 이 포탑은 공격자 공격력의 절반 만큼의 공격을 받습니다. (절반이라 함은 공격력을 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">2</span></span></span></span></span>로 나눈 몫을 의미합니다.)</p>
-<h4 id="2-포탄-공격"><a class="anchor" aria-hidden="true" tabindex="-1" href="#2-포탄-공격"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>(2) 포탄 공격</h4>
-<p>공격 대상에 포탄을 던집니다. 공격 대상은 공격자 공격력 만큼의 피해를 받습니다. 추가적으로 주위 8개의 방향에 있는 포탑도 피해를 입는데, 공격자 공격력의 절반 만큼의 피해를 받습니다. (절반이라 함은 공격력을 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">2</span></span></span></span></span>로 나눈 몫을 의미합니다.) 공격자는 해당 공격에 영향을 받지 않습니다. 만약 가장자리에 포탄이 떨어졌다면, 위에서의 레이저 이동처럼 포탄의 추가 피해가 반대편 격자에 미치게 됩니다.</p>
-<p>위의 예시에서 공격자가 공격 대상을 레이저로 공격하기 위한 최단 경로는 아래 그림과 같습니다. 최단 경로가 2개 이상 있지만, <strong>오른쪽</strong>으로 먼저 움직이는 것이 우선 순위가 높기 때문에, 다음의 경로가 선택된 것입니다. 최단 경로가 정해졌기 때문에, 공격 대상에는 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">9</span></span></span></span></span>만큼의 피해를 입히고, 경로에 있는 포탑에는 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo stretchy="false">(</mo><mo>=</mo><mn>9</mn><mi mathvariant="normal">/</mi><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">4(=9/2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">4</span><span class="mopen">(</span><span class="mrel">=</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord">9/2</span><span class="mclose">)</span></span></span></span></span> 만큼의 피해를 입힙니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/5b8dca75-fffb-400f-ae97-c5c365aad305.png">
-</p>
-<h3 id="3-포탑-부서짐"><a class="anchor" aria-hidden="true" tabindex="-1" href="#3-포탑-부서짐"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>3. 포탑 부서짐</h3>
-<p>공격을 받아 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">0</span></span></span></span></span> 이하가 된 포탑은 부서집니다.</p>
-<h3 id="4-포탑-정비"><a class="anchor" aria-hidden="true" tabindex="-1" href="#4-포탑-정비"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>4. 포탑 정비</h3>
-<p>공격이 끝났으면, 부서지지 않은 포탑 중 공격과 무관했던 포탑은 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">1</span></span></span></span></span>씩 올라갑니다. 공격과 무관하다는 뜻은 공격자도 아니고, 공격에 피해를 입은 포탑도 아니라는 뜻입니다.</p>
-<p>위의 예시에서 공격과 무관했던 다음 4개의 포탑은 정비를 받아 공격력이 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">1</span></span></span></span></span>씩 증가합니다. 이렇게 첫 번째 턴이 종료됩니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/eb4fd7a6-356f-4478-b8d7-a418c016053c.png">
-</p>
-<p>다음 두 번째 턴이 시작되면, 다시 공격자 선정이 시작됩니다.<br>
-첫 번째 규칙에 따라 가장 공격력이 작은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">9</span></span></span></span></span> 만큼의 공격력을 가진 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2, 4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(3, 1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 위치의 포탑이 공격자 후보가 됩니다. 두 번째 규칙에 의해 가장 최근에 공격한 포탑인 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1, 2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span> 포탑이 가장 약한 포탑이므로 공격자로 선정됩니다. 마찬가지로 핸디캡으로 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">8</span></span></span></span></span> 만큼의 공격력을 얻습니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/60d600fc-f909-4dac-9c46-f2c6f8a68ca0.png">
-</p>
-<p>다음으로 공격 대상을 선택하면, 공격력이 가장 높은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mo separator="true">,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(3, 4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span>가 선택됩니다. 공격자의 위치에서 공격 대상의 위치까지 이동하는 경로가 없기 때문에, 레이저 공격은 불가능하여 포탄 공격을 수행하게 됩니다. 포탄은 공격 대상인 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>3</mn><mo separator="true">,</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(3, 4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span> 위치에 떨어지며, 공격 대상은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>17</mn></mrow><annotation encoding="application/x-tex">17</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">17</span></span></span></span></span>만큼의 피해를 받고, 주변 8개의 방향에 있는 포탑은 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">8</span></span></span></span></span>만큼의 피해를 받습니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/89662d09-148e-48df-870c-ec4193618035.png">
-</p>
-<p>마지막으로 공격과 무관했던 포탑은 정비를 받아 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">1</span></span></span></span></span> 만큼의 공격력을 얻지만, 위의 예시에서는 부서지지 않은 포탑 중 공격과 무관했던 포탑이 없으므로, 최종 모습은 다음과 같습니다.</p>
-<p align="center">
-  <img width="350" src="https://s3-ap-northeast-2.amazonaws.com/codetreepublic/problems/3506/images/65f7d6e8-f0e8-4930-b892-a3aedb046787.png">
-</p>
-<p>전체 과정이 종료된 후 남아있는 포탑 중 가장 강한 포탑의 공격력을 출력하는 프로그램을 작성해보세요.</p>
-<h2 id="입력-형식"><a class="anchor" aria-hidden="true" tabindex="-1" href="#입력-형식"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>입력 형식</h2>
-<p>첫 번째 줄에 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span>가 공백을 사이에 두고 주어집니다.</p>
-<p>두 번째 줄부터 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span></span></span></span></span>개의 줄에 걸쳐서 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">N \times M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7667em; vertical-align: -0.0833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span><span class="mspace" style="margin-right: 0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right: 0.2222em;"></span></span><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span></span></span></span></span> 격자에 대한 정보가 주어집니다. 단, 최초에 부서지지 않은 포탑은 최소 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">2</span></span></span></span></span>개 이상 존재합니다.</p>
-<ul>
-<li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>≤</mo><mi>N</mi><mo separator="true">,</mo><mi>M</mi><mo>≤</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">4 \le N, M \le 10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7804em; vertical-align: -0.136em;"></span><span class="mord">4</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.8778em; vertical-align: -0.1944em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord mathnormal" style="margin-right: 0.10903em;">M</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.6444em;"></span><span class="mord">10</span></span></span></span></span></li>
-<li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>K</mi><mo>≤</mo><mn>1</mn><mo separator="true">,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">1 \le K \le 1,000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7804em; vertical-align: -0.136em;"></span><span class="mord">1</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.8193em; vertical-align: -0.136em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.8389em; vertical-align: -0.1944em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">000</span></span></span></span></span></li>
-<li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mtext>공격력</mtext><mo>≤</mo><mn>5</mn><mo separator="true">,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">0 \le 공격력 \le 5,000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.7804em; vertical-align: -0.136em;"></span><span class="mord">0</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.8193em; vertical-align: -0.136em;"></span><span class="mord hangul_fallback">공격력</span><span class="mspace" style="margin-right: 0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right: 0.2778em;"></span></span><span class="base"><span class="strut" style="height: 0.8389em; vertical-align: -0.1944em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.1667em;"></span><span class="mord">000</span></span></span></span></span></li>
-</ul>
-<h2 id="출력-형식"><a class="anchor" aria-hidden="true" tabindex="-1" href="#출력-형식"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>출력 형식</h2>
-<p>첫 번째 줄에 <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.6833em;"></span><span class="mord mathnormal" style="margin-right: 0.07153em;">K</span></span></span></span></span>번의 턴이 종료된 후 남아있는 포탑 중 가장 강한 포탑의 공격력을 출력합니다.</p></div>
+[문제 링크](https://www.codetree.ai/problems/destroy-the-turret/description?discussionRowsPerPage=5&discussionPage=1)
+
+포탑 부수기
+======
+정답률 23% · 제출 1,889회 · 예상 소요 시간 측정 불가 (2023.04.15)
+
+* * *
+
+N×M 격자가 있고, 모든 위치에는 포탑이 존재합니다. (즉, 포탑의 개수는 NM개)
+
+각 포탑에는 공격력이 존재하며, 상황에 따라 공격력이 줄어들거나 늘어날 수 있습니다. 또한, 공격력이 0 이하가 된다면, 해당 포탑은 부서지며 더 이상의 공격을 할 수 없습니다. 최초에 공격력이 0인 포탑 즉, 부서진 포탑이 존재할 수 있습니다.
+
+아래와 같은 4×4 크기의 격자를 생각해보겠습니다. (1,1), (2,2), (3,2)를 포함한 총 7개의 칸은 이미 부서진 포탑을 의미합니다.
+<img width="351" alt="image" src="https://user-images.githubusercontent.com/54070738/232116155-5f66b03f-b45b-4173-a158-1fd1d2e07edc.png">
+
+
+하나의 턴은 다음의 4가지 액션을 순서대로 수행하며, 총 K번 반복됩니다.  
+만약 부서지지 않은 포탑이 1개가 된다면 그 즉시 중지됩니다.
+
+### [](#1-공격자-선정)1\. 공격자 선정
+
+부서지지 않은 포탑 중 **가장 약한 포탑**이 공격자로 선정됩니다. 공격자로 선정되면 가장 약한 포탑이므로, 핸디캡이 적용되어 **N+M만큼의 공격력이 증가**됩니다.
+
+**가장 약한 포탑**은 다음의 기준으로 선정됩니다.
+
+1.  **공격력이 가장 낮은** 포탑이 가장 약한 포탑입니다.
+2.  만약 공격력이 가장 낮은 포탑이 2개 이상이라면, **가장 최근에 공격한 포탑**이 가장 약한 포탑입니다. (모든 포탑은 시점 0에 모두 공격한 경험이 있다고 가정하겠습니다.)
+3.  만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 **행과 열의 합이 가장 큰** 포탑이 가장 약한 포탑입니다.
+4.  만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 **열 값이 가장 큰** 포탑이 가장 약한 포탑입니다.
+
+위의 예시에서 공격자를 선정해보면, 가장 낮은 공격력은 1이기 때문에, 아래 그림과 같이 (1,2) 위치에 있는 포탑이 공격자로 선정되며, 공격력이 8(\=4(N)+4(M))만큼 증가하여 9가 됩니다.
+
+<img width="351" alt="image" src="https://user-images.githubusercontent.com/54070738/232116693-475c0621-92b2-42b2-b6b6-f72e86b766b5.png">
+
+### [](#2-공격자의-공격)2\. 공격자의 공격
+
+위에서 선정된 공격자는 자신을 제외한 **가장 강한 포탑**을 공격합니다.  
+**가장 강한 포탑**은 위에서 정한 가장 약한 포탑 선정 기준의 반대이며, 다음과 같습니다.
+
+1.  **공격력이 가장 높은** 포탑이 가장 강한 포탑입니다.
+2.  만약 공격력이 가장 높은 포탑이 2개 이상이라면, **공격한지 가장 오래된 포탑**이 가장 강한 포탑입니다. (모든 포탑은 시점 0에 모두 공격한 경험이 있다고 가정하겠습니다.)
+3.  만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 **행과 열의 합이 가장 작은** 포탑이 가장 강한 포탑입니다.
+4.  만약 그러한 포탑이 2개 이상이라면, 각 포탑 위치의 **열 값이 가장 작은** 포탑이 가장 강한 포탑입니다.
+
+위의 예시에서 공격 대상자를 선정해보겠습니다. 공격 대상인 가장 강한 포탑은 공격력이 가장 큰 26의 공격력을 가진 (3,4)위치의 포탑이 됩니다.
+
+<img width="349" alt="image" src="https://user-images.githubusercontent.com/54070738/232116741-1a076bc8-7d38-4c85-a327-f6460d978bfd.png">
+
+
+공격을 할 때에는 **레이저 공격**을 먼저 시도하고, 만약 그게 안 된다면 **포탄 공격**을 합니다. 각 공격의 규칙은 다음과 같습니다.
+
+#### [](#1-레이저-공격)(1) 레이저 공격
+
+레이저는 다음의 규칙으로 움직입니다.
+
+1.  상하좌우의 4개의 방향으로 움직일 수 있습니다.
+2.  부서진 포탑이 있는 위치는 지날 수 없습니다.
+3.  가장자리에서 막힌 방향으로 진행하고자 한다면, 반대편으로 나옵니다. (예를 들어, 위의 예시에서 (2,3)에서 오른쪽으로 두번 이동한다면, (2,3) -> (2,4) -> (2,1) 순으로 이동합니다.)
+
+레이저 공격은 공격자의 위치에서 공격 대상 포탑까지의 최단 경로로 공격합니다. 만약 그러한 경로가 존재하지 않는다면 (2) 포탄 공격을 진행합니다. 만약 경로의 길이가 똑같은 최단 경로가 2개 이상이라면, 우/하/좌/상의 우선순위대로 먼저 움직인 경로가 선택됩니다.
+
+최단 경로가 정해졌으면, 공격 대상에는 공격자의 공격력 만큼의 피해를 입히며, 피해를 입은 포탑은 해당 수치만큼 공격력이 줄어듭니다. 또한 공격 대상을 제외한 레이저 경로에 있는 포탑도 공격을 받게 되는데, 이 포탑은 공격자 공격력의 절반 만큼의 공격을 받습니다. (절반이라 함은 공격력을 2로 나눈 몫을 의미합니다.)
+
+#### [](#2-포탄-공격)(2) 포탄 공격
+
+공격 대상에 포탄을 던집니다. 공격 대상은 공격자 공격력 만큼의 피해를 받습니다. 추가적으로 주위 8개의 방향에 있는 포탑도 피해를 입는데, 공격자 공격력의 절반 만큼의 피해를 받습니다. (절반이라 함은 공격력을 2로 나눈 몫을 의미합니다.) 공격자는 해당 공격에 영향을 받지 않습니다. 만약 가장자리에 포탄이 떨어졌다면, 위에서의 레이저 이동처럼 포탄의 추가 피해가 반대편 격자에 미치게 됩니다.
+
+위의 예시에서 공격자가 공격 대상을 레이저로 공격하기 위한 최단 경로는 아래 그림과 같습니다. 최단 경로가 2개 이상 있지만, **오른쪽**으로 먼저 움직이는 것이 우선 순위가 높기 때문에, 다음의 경로가 선택된 것입니다. 최단 경로가 정해졌기 때문에, 공격 대상에는 9만큼의 피해를 입히고, 경로에 있는 포탑에는 4(\=9/2) 만큼의 피해를 입힙니다.
+
+<img width="351" alt="image" src="https://user-images.githubusercontent.com/54070738/232116772-c4c197ed-57f4-43bb-bae9-c2b195a1383b.png">
+
+### [](#3-포탑-부서짐)3\. 포탑 부서짐
+
+공격을 받아 공격력이 0 이하가 된 포탑은 부서집니다.
+
+### [](#4-포탑-정비)4\. 포탑 정비
+
+공격이 끝났으면, 부서지지 않은 포탑 중 공격과 무관했던 포탑은 공격력이 1씩 올라갑니다. 공격과 무관하다는 뜻은 공격자도 아니고, 공격에 피해를 입은 포탑도 아니라는 뜻입니다.
+
+위의 예시에서 공격과 무관했던 다음 4개의 포탑은 정비를 받아 공격력이 1씩 증가합니다. 이렇게 첫 번째 턴이 종료됩니다.
+
+<img width="348" alt="image" src="https://user-images.githubusercontent.com/54070738/232116795-c525486a-f6d3-47f2-9500-1cd8c7939213.png">
+
+다음 두 번째 턴이 시작되면, 다시 공격자 선정이 시작됩니다.  
+첫 번째 규칙에 따라 가장 공격력이 작은 9 만큼의 공격력을 가진 (1,2), (2,1), (2,4), (3,1) 위치의 포탑이 공격자 후보가 됩니다. 두 번째 규칙에 의해 가장 최근에 공격한 포탑인 (1,2) 포탑이 가장 약한 포탑이므로 공격자로 선정됩니다. 마찬가지로 핸디캡으로 8 만큼의 공격력을 얻습니다.
+
+<img width="353" alt="image" src="https://user-images.githubusercontent.com/54070738/232116816-263fa6b9-c852-4d95-880c-56aaa5954490.png">
+
+다음으로 공격 대상을 선택하면, 공격력이 가장 높은 (3,4)가 선택됩니다. 공격자의 위치에서 공격 대상의 위치까지 이동하는 경로가 없기 때문에, 레이저 공격은 불가능하여 포탄 공격을 수행하게 됩니다. 포탄은 공격 대상인 (3,4) 위치에 떨어지며, 공격 대상은 17만큼의 피해를 받고, 주변 8개의 방향에 있는 포탑은 8만큼의 피해를 받습니다.
+
+<img width="349" alt="image" src="https://user-images.githubusercontent.com/54070738/232116842-382bafbc-8a06-44e7-86fa-c00df65db4eb.png">
+
+마지막으로 공격과 무관했던 포탑은 정비를 받아 1 만큼의 공격력을 얻지만, 위의 예시에서는 부서지지 않은 포탑 중 공격과 무관했던 포탑이 없으므로, 최종 모습은 다음과 같습니다.
+
+<img width="350" alt="image" src="https://user-images.githubusercontent.com/54070738/232116897-92c638ce-51c8-4d86-8c6a-e1b389879e9e.png">
+
+전체 과정이 종료된 후 남아있는 포탑 중 가장 강한 포탑의 공격력을 출력하는 프로그램을 작성해보세요.
+
+[](#입력-형식)입력 형식
+---------------
+
+첫 번째 줄에 N, M, K가 공백을 사이에 두고 주어집니다.
+
+두 번째 줄부터 N개의 줄에 걸쳐서 N×M 격자에 대한 정보가 주어집니다. 단, 최초에 부서지지 않은 포탑은 최소 2개 이상 존재합니다.
+
+*   4≤N,M≤10
+*   1≤K≤1,000
+*   0≤공격력≤5,000
+
+[](#출력-형식)출력 형식
+---------------
+
+첫 번째 줄에 K번의 턴이 종료된 후 남아있는 포탑 중 가장 강한 포탑의 공격력을 출력합니다.
+
+#### 입출력 예제
+
+#### 예제1
+
+입력:
+
+    4 4 1
+    0 1 4 4
+    8 0 10 13
+    8 0 11 26
+    0 0 0 0
+    
+
+출력:
+
+    17
+    
+
+#### 예제2
+
+입력:
+
+    4 4 2
+    0 1 4 4
+    8 0 10 13
+    8 0 11 26
+    0 0 0 0
+    
+
+출력:
+
+    17
+    
+
+#### 제한
+
+    시간 제한: 1000ms
+    메모리 제한: 80MB
+
+* * *
