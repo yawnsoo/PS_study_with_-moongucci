@@ -15,7 +15,6 @@ public class BOJ14501 {
                 }else{ //  - 마지막날 초과 : 초과한 날짜 빼기
                     answer = Math.max(answer,total-last);
                 }
-
                 return;
             }
 

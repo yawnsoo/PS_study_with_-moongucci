@@ -1,6 +1,7 @@
+package BOJ;
 import java.util.*;
 
-public class Main {
+public class BOJ14499 {
     static int n;
     static int m;
     static int ny; //x
@@ -60,7 +61,7 @@ public class Main {
                 }
                 break;
 
-            default : System.out.println("solution : Invalid command");
+            default : System.out.println("moveDice : Invalid command");
         }
     }
     private void rollDice(int command) {
@@ -130,12 +131,12 @@ public class Main {
         for (int i = 0; i < k; i++) {
             isMoved = false;
             int command = sc.nextInt();
-            int answer = new Main().solution(command);
+            int answer = new BOJ14499().solution(command);
 
             if(answer!=-1){
                 System.out.println(answer);
             }
         }
-
     }
+
 }
