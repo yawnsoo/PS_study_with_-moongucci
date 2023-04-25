@@ -1,6 +1,9 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ14500 {
+
     static int n;
     static int m;
     static int[][] map;
@@ -85,7 +88,7 @@ public class Main {
             }
         }
 
-        System.out.println(new Main().solution());
+        System.out.println(new BOJ14500().solution());
 
     }
 }
