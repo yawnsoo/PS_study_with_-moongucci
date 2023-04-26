@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ14502 {
     static int n;
     static int m;
     static int zeros;
@@ -113,8 +115,6 @@ public class Main {
 
             }
         }
-
-        System.out.println(new Main().solution());
-
+        System.out.println(new BOJ14502().solution());
     }
 }
