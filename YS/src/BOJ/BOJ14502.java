@@ -7,16 +7,20 @@ public class BOJ14502 {
     static int m;
     static int zeros;
     static int[][] map;
+    static int[][] mapSimul;
     static boolean[][] visited;
     static List<int[]> spreaders = new ArrayList<>();
     static int answer;
+    static int infected;
+    static int[] dy = new int[]{0,1,0,-1};
+    static int[] dx = new int[]{1,0,-1,0};
 
     //완전탐색?
     //벽 3개 : 62*61*60
     //BFS 시간 복잡도 : 64
     // 총 시간 복잡도(최악) = (62*61*60)*64 = 약 1000만대, 굿
-
     public int solution() {
+        answer = 0;
 
         // 벽 3개 세우기 : dfs
         dfs(0,0,3);
@@ -42,33 +46,26 @@ public class BOJ14502 {
                     map[i][j] = 0;
                 }
             }
-
         }
-
     }
 
     private void bfs() {
 
         Queue<int[]> q = new LinkedList<>(spreaders);
-        int[] dy = new int[]{0,1,0,-1};
-        int[] dx = new int[]{1,0,-1,0};
-        int[][] mapSimul = new int[n][m];
-        int infected = 0;
+        infected = 0;
 
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+            for(int j = 0; j < m; j++) {
                 mapSimul[i][j] = map[i][j];
             }
         }
 
         while (!q.isEmpty()) {
             int[] spreader = q.poll();
-            int y = spreader[0];
-            int x = spreader[1];
 
             for (int i = 0; i < 4; i++) {
-                int ny = y + dy[i];
-                int nx = x + dx[i];
+                int ny = spreader[0] + dy[i];
+                int nx = spreader[1] + dx[i];
 
                 //범위 이탈
                 if(ny<0||nx<0||ny>=n||nx>=m){
@@ -96,8 +93,8 @@ public class BOJ14502 {
         m = sc.nextInt();
 
         map = new int[n][m];
+        mapSimul = new int[n][m];
         visited = new boolean[n][m];
-        answer = 0;
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -115,6 +112,8 @@ public class BOJ14502 {
 
             }
         }
+
         System.out.println(new BOJ14502().solution());
+
     }
 }
