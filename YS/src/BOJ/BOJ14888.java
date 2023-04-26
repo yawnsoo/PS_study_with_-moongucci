@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ14888 {
 
     static int n;
     static int[] numbers;
@@ -57,6 +59,5 @@ public class Main {
 
         System.out.println(max);
         System.out.println(min);
-
     }
 }
