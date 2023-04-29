@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ14889 {
     static int n;
     static int diffMin = 100*10*9;
     static int total;
