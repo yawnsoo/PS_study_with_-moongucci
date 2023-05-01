@@ -1,6 +1,19 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+/**
+ * 문제에 사용되는 알고리즘은 어렵지 않았음.
+ * BUT, 주어진 문제의 input값을 결정하는데 오래 걸림.
+ * 다음과 같은 시도를 함.
+ * 1. 톱니바퀴의 input값을 회전을 목표로 deque를 사용 -> deque의 중간 순서의 값을 가져오기가 안됨
+ * 2. StringBuffer를 이용 -> 반시계 방향으로 회전시 끝 값 -> 처음 으로 이동. StringBuffer는 뒤에 값을 추가하기에 유용, 앞에 추가하는 메서드는 없음
+ *      ---->>>> 찾아보니 insert()메서드가 있었음....!
+ *      수정 후 제출 결과, String 보다 StringBuffer가 속도, 메모리 더 효율적.
+ * 3. String 이용 -> charAt()과 substring()메서드 이용하여 회전 구현
+* */
+
+public class BOJ14891 {
     static int k;
     static StringBuffer[] cogwheels = new StringBuffer[4];
 
