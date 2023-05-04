@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ15683 {
     static int n;
     static int m;
     static int[][] map;
