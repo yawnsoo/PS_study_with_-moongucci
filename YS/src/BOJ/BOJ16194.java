@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ16194 {
     static int n;
     static int[] cardPacks;
     static int[] ans;
