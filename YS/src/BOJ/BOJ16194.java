@@ -1,17 +1,19 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ16194 {
     static int n;
     static int[] cardPacks;
-    static int[] dp;
+    static int[] ans;
 
 
     public static void solution() {
 
         for (int i = 1; i <= n; i++) {
-            dp[i] = cardPacks[i];
-            for (int j = 1; j <= i; j++) {
-                dp[i] = Math.max(dp[i], dp[i - j] + cardPacks[j]);
+            ans[i] = cardPacks[i];
+            for (int j = 1; j <=i; j++) {
+                ans[i] = Math.min(ans[i], ans[i-j] + cardPacks[j]);
             }
         }
 
@@ -27,10 +29,10 @@ public class Main {
         for (int i = 1; i <= n; i++) {
             cardPacks[i] = sc.nextInt();
         }
-        dp = new int[n+1];
+        ans = new int[n+1];
 
         solution();
 
-        System.out.println(dp[n]);
+        System.out.println(ans[n]);
     }
 }
