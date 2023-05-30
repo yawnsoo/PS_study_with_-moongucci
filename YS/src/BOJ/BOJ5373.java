@@ -1,6 +1,8 @@
+package BOJ;
+
 import java.util.*;
 
-public class Main {
+public class BOJ5373 {
     static int c;
     static String[][][] cube;
 
