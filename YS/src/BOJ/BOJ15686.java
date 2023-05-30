@@ -1,6 +1,10 @@
-import java.util.*;
+package BOJ;
 
-public class Main {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class BOJ15686 {
     static int n;
     static int m;
     static int[][] map;
